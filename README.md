@@ -53,3 +53,9 @@ Requires $PORT to expose it in the running machine
 ```sh
 make run PORT=8080
 ```
+
+Or pull it from [https://hub.docker.com/r/jaimemartinez88/throttler/](https://hub.docker.com/r/jaimemartinez88/throttler/)
+
+```sh
+docker run --name bcg-challenge-throttler -p $PORT:$PORT -e PORT=$PORT jaimemartinez88/throttler:latest
+```
