@@ -26,7 +26,7 @@ go build ./cmd/bcg.service.throttler/ && ./bcg.service.throttler -config config.
 ## Unit tests
 
 **NOTE**
-One of the testing scenarios sleeps for a few milliseconds while waiting for the limit to reset, so they whole suite takes a bit longer to run.
+One of the testing scenarios sleeps for a few milliseconds while waiting for the limit to reset, so the whole suite takes a bit longer to run.
 
 ```sh
 go test

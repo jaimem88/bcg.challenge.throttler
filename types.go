@@ -31,8 +31,7 @@ type Throttler struct {
 }
 
 type requester struct {
-	token     string
-	counter   int64
-	startTime time.Time
-	endTime   time.Time
+	token   string
+	counter int64
+	endTime time.Time
 }
