@@ -1,0 +1,4 @@
+.DS_Store
+config.json
+config.*.json
+/bcg.service.throttler
