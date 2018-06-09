@@ -14,8 +14,12 @@ config:
 build: config
 	docker build -t jaimemartinez88/throttler:$(VERSION) .
 
+.PHONY: test
+test:
+	docker run  -t -v $(PWD):/go/src/github.com/jaimemartinez88/$(BINARY) -w /go/src/github.com/jaimemartinez88/$(BINARY) golang:1.10.2 go test
+
 .PHONY: run-docker
-run-docker: build
+run: build
 	docker rm -f bcg-challenge-throttler || true
 	docker run --name bcg-challenge-throttler -p $(PORT):$(PORT) -e PORT=$(PORT) jaimemartinez88/throttler:$(VERSION)
 ifndef PORT

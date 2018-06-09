@@ -87,7 +87,7 @@ func (s *Service) CheckLimitsMiddlware(next http.Handler) http.Handler {
 		}
 		cachedToken.counter++
 
-		log.Infof("cached token: %s now: %s reset-time: %s\n", cachedToken.token, now, cachedToken.endTime)
+		log.Infof("cached token: %s\n", cachedToken.token)
 
 		if cachedToken.counter > s.Throttler.N {
 			if now.Before(cachedToken.endTime) { // limit reached already

@@ -25,8 +25,17 @@ go build ./cmd/bcg.service.throttler/ && ./bcg.service.throttler -config config.
 
 ## Unit tests
 
+**NOTE**
+One of the testing scenarios sleeps for a few milliseconds while waiting for the limit to reset, so they whole suite takes a bit longer to run.
+
 ```sh
 go test
+```
+
+Or in a Docker container
+
+```sh
+make test
 ```
 
 ## Build docker image
@@ -39,8 +48,8 @@ make build
 
 ## Running in a Docker container
 
-Requires $PORT to expose in the running machine
+Requires $PORT to expose it in the running machine
 
 ```sh
-make run-docker PORT=8080
+make run PORT=8080
 ```
