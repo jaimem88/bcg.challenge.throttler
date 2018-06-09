@@ -28,8 +28,8 @@ var config = struct {
 		ListenPort: os.Getenv("PORT"),
 	},
 	Throttling: &Throttling{
-		N: 10,
-		M: 1000,
+		N: 2,
+		M: 3000,
 	},
 }
 

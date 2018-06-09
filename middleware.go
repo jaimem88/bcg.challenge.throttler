@@ -2,8 +2,10 @@ package throttler
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/felixge/httpsnoop"
 	log "github.com/sirupsen/logrus"
@@ -62,10 +64,41 @@ func (s *Service) ValidateAccessToken(next http.Handler) http.Handler {
 	})
 }
 
-// ThrottlerMiddlware ..
-func (s *Service) ThrottlerMiddlware(next http.Handler) http.Handler {
+// CheckLimitsMiddlware checks the in-memory cache for token usage
+// it adds an entry to the map if it's a new token.
+// It checks for time passed a
+func (s *Service) CheckLimitsMiddlware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// token := r.Context().Value(ctxToken)
+		ctxToken := r.Context().Value(ctxToken)
+		if ctxToken == nil {
+			s.writeError(w, errInternalServerError.msg("CheckLimitsMiddlware failed to get token from context"))
+			return
+		}
+		token := ctxToken.(string)
+		now := time.Now()
+		cachedToken, ok := s.Throttler.cache[token]
+		if !ok {
+			s.Throttler.cache[token] = &requester{
+				token:   token,
+				counter: 0,
+				endTime: now.Add(time.Duration(s.Throttler.M) * time.Millisecond),
+			}
+			cachedToken = s.Throttler.cache[token]
+		}
+		cachedToken.counter++
+
+		log.Infof("cached token: %s now: %s reset-time: %s\n", cachedToken.token, now, cachedToken.endTime)
+
+		if cachedToken.counter > s.Throttler.N {
+			if now.Before(cachedToken.endTime) { // limit reached already
+				timeLeft := cachedToken.endTime.Sub(now).Seconds() * 1000
+				s.writeError(w, &Error{Code: http.StatusTooManyRequests, Message: fmt.Sprintf("Too many requests: %.2fms left until reset", timeLeft)})
+				return
+			}
+			cachedToken.counter = 1
+			cachedToken.endTime = now.Add(time.Duration(s.Throttler.M) * time.Millisecond)
+		}
+
 		next.ServeHTTP(w, r)
 
 	})

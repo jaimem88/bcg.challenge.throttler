@@ -11,7 +11,8 @@ Implementation of an API Service Throttler
 ## Assumptions
 
 1. Token must be present in the `Authorization` header as a `Bearer` token type
-2. Used an unsafe in-memory cache using a map
+2. Used an unsafe in-memory cache using a map. An external service, e.g. Redis, could be used to persist the cache
+3. Using start/end times to check limits. I could have used a `time.Timer` listening for the `channel` to update the in memory cache.
 
 ## Running
 

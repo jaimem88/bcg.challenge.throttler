@@ -64,7 +64,7 @@ func main() {
 
 	v1 := r.PathPrefix("/v1/").Subrouter()
 	v1.Use(service.ValidateAccessToken)
-	v1.Use(service.ThrottlerMiddlware)
+	v1.Use(service.CheckLimitsMiddlware)
 
 	v1.HandleFunc("/users", service.HandleGetUsers).Methods(http.MethodGet)
 
