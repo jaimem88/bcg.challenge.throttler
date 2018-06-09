@@ -6,7 +6,12 @@ Implementation of an API Service Throttler
 
 - Start by creating a service with an endpoint to retrieve a list of users. This endpoint can simply return an empty array in the response.
 - Every request should include an access token, otherwise it should fail. Any non-empty string is a valid token, otherwise it should fail as well.
-- For each token, restrict access to N requests per M milliseconds where N and M are configurable. Once the limit has been reached, subsequent requests should fail and provide the amount of milliseconds remaining until eset to allow for rescheduling.
+- For each token, restrict access to N requests per M milliseconds where N and M are configurable. Once the limit has been reached, subsequent requests should fail and provide the amount of milliseconds remaining until reset to allow for rescheduling.
+
+## Assumptions
+
+1. Token must be present in the `Authorization` header as a `Bearer` token type
+2. Used an unsafe in-memory cache using a map
 
 ## Running
 

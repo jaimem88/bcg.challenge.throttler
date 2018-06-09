@@ -17,7 +17,7 @@ build: config
 .PHONY: run-docker
 run-docker: build
 	docker rm -f bcg-challenge-throttler || true
-	docker run --name bcg-challenge-throttler -p $(PORT):$(PORT) -e PORT=$(PORT) throttler:$(VERSION)
+	docker run --name bcg-challenge-throttler -p $(PORT):$(PORT) -e PORT=$(PORT) jaimemartinez88/throttler:$(VERSION)
 ifndef PORT
 	$(error PORT environment variable is missing)
 endif
